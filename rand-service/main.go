@@ -6,15 +6,20 @@ import (
 	"github.com/micro/go-plugins/registry/consul/v2"
 	"oceanmico/proto/rand"
 	"oceanmico/rand-service/handler"
+	"oceanmico/rand-service/middleware"
 )
 
 func main() {
 	consulRegistry := consul.NewRegistry(
 		registry.Addrs("127.0.0.1:8500"),
 	)
+	//初始化限流器
+	middleware.InitSentinel()
 	service := micro.NewService(
 		micro.Name("go.micro.ocean.rand"),
 		micro.Registry(consulRegistry),
+		//添加限流器
+		micro.WrapHandler(middleware.LimitingWrapper()),
 	)
 
 	service.Init()

@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"oceanmico/proto/rand"
 	"oceanmico/proto/user"
@@ -26,10 +27,15 @@ func (s *APIHandler) Rand(ctx *gin.Context) {
 	//请求参数绑定到RandRequest
 	ctx.ShouldBindQuery(&request)
 	//使用客户端的GetRand方法处理
-	response, _ := s.randClient.GetRand(context.Background(), &request)
+	response, err := s.randClient.GetRand(context.Background(), &request)
+	if err != nil {
+		log.Println(err)
+	}
+	username, _ := ctx.Get("user")
 	//构造响应返回web
 	ctx.JSON(http.StatusOK, gin.H{
-		"result": response.GetResult(),
+		"username": username,
+		"result":   response.GetResult(),
 	})
 }
 
