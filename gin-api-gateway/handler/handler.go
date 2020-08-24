@@ -46,3 +46,17 @@ func (s *APIHandler) RegistryUser(ctx *gin.Context) {
 		"token":   responst.GetToken(),
 	})
 }
+
+func (s *APIHandler) LoginUser(ctx *gin.Context) {
+	request := user.UserLoginRequest{}
+
+	_ = ctx.ShouldBindJSON(&request)
+
+	response, _ := s.userClient.UserLogin(context.Background(), &request)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": response.GetMessage(),
+		"token":   response.GetToken(),
+	})
+
+}
