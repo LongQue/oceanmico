@@ -11,7 +11,6 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		tokenString := ctx.GetHeader("Authorization")
 		if tokenString == "" || tokenString[0:7] != "Bearer " {
-			//TODO 回传错误
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"message": "用户验证失败",
 			})
@@ -21,7 +20,6 @@ func AuthMiddleware() gin.HandlerFunc {
 		token, claims, err := common.ParseToken(tokenString[7:])
 		//验证token
 		if err != nil || !token.Valid {
-			//TODO 回传错误
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"message": "用户验证失败",
 			})

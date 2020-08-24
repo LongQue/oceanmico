@@ -11,7 +11,6 @@ func main() {
 	//1、web http进来
 	r := gin.Default()
 	v1 := r.Group("/v1")
-	//TODO 解决回调函数
 	//2、获取被调用的客户端
 	randClient := client.GetRandClient()
 	userClient := client.GetUserClient()
